@@ -1,0 +1,31 @@
+{
+    "hooks": {
+        "before:init": [
+            "yarn build"
+        ],
+        "before:git:release": "git checkout -b deploy/$(git log -n1 --pretty='%h')",
+        "after:git:release": "git checkout $(git log -n1 --pretty='%h') && git branch -D deploy/$(git log -n1 --pretty='%h') && git push origin :deploy/$(git log -n1 --pretty='%h')"
+    },
+    "git": {
+        "requireCleanWorkingDir": false,
+        "requireUpstream": false,
+        "commit": false,
+        "tag": true,
+        "tagName": "v${version}",
+        "tagArgs": [],
+        "push": true
+    },
+    "github": {
+        "release": true,
+        "skipChecks": true,
+        "releaseName": "v${version}"
+    },
+    "npm": {
+        "publish": true,
+        "publishPath": ".",
+        "tag": null,
+        "ignoreVersion": true,
+        "skipChecks": true,
+        "timeout": 10
+    }
+}
