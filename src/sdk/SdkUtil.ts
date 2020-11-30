@@ -68,7 +68,7 @@ export class SdkUtil {
 
 			const images = JSON.parse(result)
 			const winSvr = images.filter((list: any) => {
-				return list.Name.includes("AppStream-WinServer2019")
+				return list.Name.includes(this.config?.baseImage || "AppStream-WinServer2019")
 			})
 			const result2 = Object.keys(winSvr)
 				.sort((a, b) => Date.parse(winSvr[b].PublicBaseImageReleasedDate) - Date.parse(winSvr[a].PublicBaseImageReleasedDate))

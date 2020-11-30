@@ -1,6 +1,6 @@
 {
   "name": "@zigbang/appstream",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "main": "index.js",
   "scripts": {
     "build": "npx -p @mermaid-js/mermaid-cli mmdc -i ./docs/workflow.mmd -o ./docs/workflow.png && npx tsc",
