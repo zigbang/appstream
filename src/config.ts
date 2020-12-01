@@ -17,8 +17,8 @@ export interface Config {
 	fleetType?: string
 	stackName: string
 	instanceType: string
-	connectorType?: string
-	domain?: string[]
+	storageConnectorType?: string
+	connectorDomains?: string[]
 	applications: Application[]
 	scripts?: string[]
 }

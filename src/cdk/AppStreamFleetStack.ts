@@ -61,10 +61,20 @@ export class AppstreamFleetStack extends cdk.Stack {
 		})
 
 		const stackName = `${config.stackName}-${moment().format("YYYYMMDD")}`
-		new appstream.CfnStack(this, "stack", {
-			name: stackName,
-			storageConnectors: [{ connectorType: config.connectorType || "HOMEFOLDERS", domains: config.domain || undefined }]
-		})
+		const connectorType = config.storageConnectorType
+		const domains = config.connectorDomains || undefined
+
+		if (connectorType === "ONE_DRIVE" || connectorType === "GOOGLE_DRIVE" || connectorType === "HOMEFOLDERS") {
+			new appstream.CfnStack(this, "stack", {
+				name: stackName,
+				storageConnectors: [{ connectorType, domains }]
+			})
+		} else {
+			new appstream.CfnStack(this, "stack", {
+				name: stackName
+			})
+		}
+
 	}
 }
 
