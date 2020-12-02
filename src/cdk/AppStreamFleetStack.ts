@@ -25,7 +25,7 @@ export class AppstreamFleetStack extends cdk.Stack {
 		})
 
 		const securityGroup = new ec2.SecurityGroup(this, "Fleet-EC2", {
-			vpc, allowAllOutbound: true
+			vpc, allowAllOutbound: config.fleetEnableDefaultInternetAccess || true
 		})
 
 		const subnetId = ec2.Subnet.fromSubnetAttributes(this, "subnet", { subnetId: config.subnet, ipv4CidrBlock: config.cidr })
@@ -46,21 +46,35 @@ export class AppstreamFleetStack extends cdk.Stack {
 		securityGroup.addIngressRule(ec2.Peer.ipv4(`${subnetId.ipv4CidrBlock}`), ec2.Port.tcpRange(1024, 65535), "HTTP")
 
 		const subnetIds = [config.subnet]
+		const desiredInstances = config.fleetDesiredInstances || 5
 		const instanceType = config.instanceType
 		const name = `${config.fleetName}-${moment().format("YYYYMMDD")}`
+		const enableDefaultInternetAccess = config.fleetEnableDefaultInternetAccess || true
 		const sdk = new SdkUtil(config)
 		const imageArn = await sdk.describeAppstreamImageArn()
 		const securityGroupIds = [securityGroup.securityGroupId]
-
+		const fleetType = config.fleetType || "ON_DEMAND"
 		new appstream.CfnFleet(this, "Fleet", {
-			computeCapacity: { desiredInstances: 5 }, instanceType, name,
-			enableDefaultInternetAccess: true,
-			fleetType: "ON_DEMAND", imageArn,
+			computeCapacity: { desiredInstances }, instanceType, name,
+			enableDefaultInternetAccess, fleetType, imageArn,
 			vpcConfig: { securityGroupIds, subnetIds }
 		})
 
 		const stackName = `${config.stackName}-${moment().format("YYYYMMDD")}`
-		new appstream.CfnStack(this, "stack", { name: stackName })
+		const connectorType = config.storageConnectorType
+		const domains = config.connectorDomains || undefined
+
+		if (connectorType === "ONE_DRIVE" || connectorType === "GOOGLE_DRIVE" || connectorType === "HOMEFOLDERS") {
+			new appstream.CfnStack(this, "stack", {
+				name: stackName,
+				storageConnectors: [{ connectorType, domains }]
+			})
+		} else {
+			new appstream.CfnStack(this, "stack", {
+				name: stackName
+			})
+		}
+
 	}
 }
 

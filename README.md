@@ -88,23 +88,29 @@ AppStream 이미지를 만들기 위해서는 사람의 손이 너무 많이 가
 
 ### Root
 
-| Variable           | Required | Description                                                                                                                                                                                                                                                         |
-| ------------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| awsAccessKeyId     | o        | `AppStream`의 배포 과정에서 Active Directory에서 Image Builder 배포 시 필요한 AWS IAM Access Key ID                                                                                                                                                                 |
-| awsSecretAccessKey | o        | `AppStream`의 배포 과정에서 Active Directory에서 Image Builder 배포 시 필요한 AWS IAM Secret Access Key                                                                                                                                                             |
-| awsRegion          | o        | `AppStream`의 배포 과정에서 사용할 AWS Region [AWS Region Endpoints List](https://docs.aws.amazon.com/general/latest/gr/rande.html) 참고                                                                                                                            |
-| vpc                | o        | `AppStream`의 배포 과정에서 사용하고 Fleet이 만들어지는 VPC의 ID                                                                                                                                                                                                    |
-| availabilityZones  | o        | `AppStream`의 배포 과정에서 사용하고 fleet에서 사용될 availabilityZones                                                                                                                                                                                             |
-| subnet             | o        | `AppStream`의 배포 과정에서 사용하고 fleet에서 사용될 subnet의 ID                                                                                                                                                                                                   |
-| cidr               | o        | `AWS Subnet` Ip prefix (ex. 172.16.1.0/24)                                                                                                                                                                                                                          |
-| keyPair            | x        | `AppStream`의 배포 과정에서 생성되는 EC2에 바인딩될 Key Pair의 이름                                                                                                                                                                                                 |
-| s3BucketUrl        | o        | `AppStream`이 배포 과정에서 사용할 파일을 임시 저장하는 S3 버킷 URL                                                                                                                                                                                                 |
-| applications       | o        | 설치할 소프트웨어의 목록                                                                                                                                                                                                                                            |
-| imageBuilderName   | o        | `Appstream Image Builder` 이름                                                                                                                                                                                                                                      |
-| imageName          | o        | `Appstream Image` 이름                                                                                                                                                                                                                                              |
-| fleetName          | o        | `Appstream Fleet` 이름                                                                                                                                                                                                                                              |
-| stacktName         | o        | `Appstream Stack` 이름                                                                                                                                                                                                                                              |
-| instanceType       | o        | `Appstream Image Builder` 및 `Fleet`에서 사용 하는 VM instance 유형 (ex. stream.standard.medium) [Appstream Instance Type List](https://aws.amazon.com/appstream2/pricing/#:~:text=Amazon%20AppStream%202.0%20supports%20three,and%20Streaming%20URL%20(API).) 참고 |
+| Variable           | Required | Type | Default Value |Description                                                                                                                                                                                                                                                         |
+| ------------------ | -------- | -----| ------------- |------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| awsAccessKeyId     | o        | String | - | `AppStream`의 배포 과정에서 Active Directory에서 Image Builder 배포 시 필요한 AWS IAM Access Key ID                                                                                                                                                                 |
+| awsSecretAccessKey | o        | String | - | `AppStream`의 배포 과정에서 Active Directory에서 Image Builder 배포 시 필요한 AWS IAM Secret Access Key                                                                                                                                                             |
+| awsRegion          | o        | String | - | `AppStream`의 배포 과정에서 사용할 AWS Region [AWS Region Endpoints List](https://docs.aws.amazon.com/general/latest/gr/rande.html) 참고                                                                                                                            |
+| vpc                | o        | String | - | `AppStream`의 배포 과정에서 사용하고 Fleet이 만들어지는 VPC의 ID                                                                                                                                                                                                    |
+| availabilityZones  | o        | String | -  | `AppStream`의 배포 과정에서 사용하고 fleet에서 사용될 availabilityZones                                                                                                                                                                                             |
+| subnet             | o        | String | - | `AppStream`의 배포 과정에서 사용하고 fleet에서 사용될 subnet의 ID                                                                                                                                                                                                   |
+| cidr               | o        | String | - |`AWS Subnet` Ip prefix (ex. 172.16.1.0/24)                                                                                                                                                                                                                          |
+| keyPair            | x        | String | - |`AppStream`의 배포 과정에서 생성되는 EC2에 바인딩될 Key Pair의 이름                                                                                                                                                                                                 |
+| s3BucketUrl        | o        | String | - |`AppStream`이 배포 과정에서 사용할 파일을 임시 저장하는 S3 버킷 URL                                                                                                                                                                                                 |
+| imageBuilderName   | o        | String | - | `AppStream Image Builder` 이름                                                                                                                                                       
+| baseImage   | x        | String | AppStream-WinServer2019| `AppStream Image Builder`에서 생성할 Base Image, [AppStream Base Image List](https://docs.aws.amazon.com/appstream2/latest/developerguide/base-image-version-history.html) 참고<br>               `ex) AppStream-Graphics-G4dn-WinServer2019`로 값을 넣으면 해당 이미지 중 Release Date 중 가장 최신인 이미지를 가져옴(현재 기준: `AppStream-Graphics-G4dn-WinServer2019-07-16-2020`)<br>                      |
+| imageName          | o        | String | - | `AppStream Image` 이름                                                                                                                                                                                                                                              |
+| fleetName          | o        | String | - | `AppStream Fleet` 이름                                                                                                                                                                                                                                            |
+| fleetEnableDefaultInternetAccess?          | x        | Boolean | true | `AppStream Fleet`에서 Internet Access 허용 유무<br>NAT Gateway를 사용할 경우 `false`로 설정 그리고 사용할 `subnet`이 Private Subnet인지 확인                                                                                                                                                                                                                                                |
+| fleetDesiredInstances        | x        | Number | 5 | `AppStream Fleet`에서 사용할 Instance의 개수 <br> [Fleet Auto Scaling](https://docs.aws.amazon.com/appstream2/latest/developerguide/autoscaling.html) 참고                                                                                                                                                                              |
+| fleetType         | x        | String | ON_DEMAND | `AppStream Fleet`에서 Desktop까지 제공할 경우: `ALWAYS_ON`, Application만 제공할 경우: `ON_DEMAND`                                                                                                                                                                                                                            |
+| stacktName         | o        | String  | - |`AppStream Stack` 이름                                                                                                                                                                                                                                              |
+| instanceType       | o        | String | - | `AppStream Image Builder` 및 `Fleet`에서 사용 하는 VM instance 유형 (ex. stream.standard.medium) [AppStream Instance Type List](https://aws.amazon.com/appstream2/pricing/#:~:text=Amazon%20AppStream%202.0%20supports%20three,and%20Streaming%20URL%20(API).) 참고 |
+| storageConnectorType | x        | String | - |`AppStream Stack`에서 사용 하는 Storage Type `GOOGLE_DRIVE, ONE_DRIVE, HOMEFOLDERS` <br>[AppStream Storage Connector](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appstream-stack-storageconnector.html#cfn-appstream-stack-storageconnector-connectortype) 참고|
+| connectorDomains  | x        | String[] | undefined |`AppStreamStack`                                                                                                                                                   에서 Storage Connector 중 `GOOGLE_DRIVE` 혹은 `ONE_DRIVE` 사용 시 Access 가능한 Domain 지정 (ex. `zigbang.com`)<br> `기본 값: undefined`                  |
+| applications       | o        | String[] | - | 설치할 소프트웨어의 목록                                                                                                                                                                                                                                            |
 
 ### Application
 
@@ -112,12 +118,19 @@ Image Assistant CLI의 상세한 옵션은 다음 URL을 참고 하세요.
 
 * https://docs.aws.amazon.com/appstream2/latest/developerguide/programmatically-create-image.html
 
-| Variable    | Required | Description                                                   |
-| ----------- | -------- | ------------------------------------------------------------- |
-| id          | o        | Image Assistant CLI `add-application`의 `--name`              |
-| packageName | o        | [Chocolatey](https://chocolatey.org/) 패키지명                |
-| path        | o        | Image Assistant CLI `add-application`의 `--absolute-app-path` |
-| displayName | o        | Image Assistant CLI `add-application`의 `--display-name`      |
+| Variable    | Required | Type   | Description                                                   |
+| ----------- | -------- | ------ | ------------------------------------------------------------- |
+| id          | o        | String | Image Assistant CLI `add-application`의 `--name`              |
+| packageName | o        | String | [Chocolatey](https://chocolatey.org/) 패키지명                  |
+| path        | o        | String | Image Assistant CLI `add-application`의 `--absolute-app-path` |
+| displayName | o        | String | Image Assistant CLI `add-application`의 `--display-name`      |
+
+
+
+### Scripts 
+| Variable    | Required | Type     | Description                                                            |
+| ----------- | -------- | -------- | ---------------------------------------------------------------------- |
+| Scripts     | x        | String[] | `AppStream Image Builder`에 추가적인 Powershell 설정이 필요한 경우 해당 옵션 사용 |
 
 ## How It Works Internally
 

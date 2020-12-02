@@ -8,12 +8,19 @@ export interface Config {
 	cidr: string
 	keyPair?: string
 	s3BucketUrl: string
-	applications: Application[]
 	imageBuilderName: string
+	baseImage?: string
 	imageName: string
 	fleetName: string
+	fleetEnableDefaultInternetAccess?: boolean
+	fleetDesiredInstances?: number
+	fleetType?: string
 	stackName: string
 	instanceType: string
+	storageConnectorType?: string
+	connectorDomains?: string[]
+	applications: Application[]
+	scripts?: string[]
 }
 
 export interface Application {
