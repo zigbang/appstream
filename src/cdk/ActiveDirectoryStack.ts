@@ -21,6 +21,15 @@ export class ActiveDirectoryStack extends cdk.Stack {
 		const config = JSON.parse(fs.readFileSync(configFile, "utf8")) as Config
 		const packages = JSON.parse(fs.readFileSync(packageFile, "utf8"))
 
+		if (config.awsTag) {
+			const tag = cdk.Tags.of(this)
+			tag.add("Service", config.awsTag.service)
+			tag.add("Team", config.awsTag.team)
+			tag.add("User", config.awsTag.user)
+			tag.add("Environment", config.awsTag.environment)
+		}
+
+
 		// vpc
 		const availabilityZones = [config.availabilityZone]
 		const vpc = ec2.Vpc.fromVpcAttributes(this, "appstream-vpc", {
@@ -137,6 +146,8 @@ export class ActiveDirectoryStack extends cdk.Stack {
 
 (async () => {
 	const app = new cdk.App()
-	const stack = new ActiveDirectoryStack(app, "AppStream")
+	const configFile = app.node.tryGetContext("configFile")
+	const config = JSON.parse(fs.readFileSync(configFile, "utf8")) as Config
+	const stack = new ActiveDirectoryStack(app, `AppStream-${config.imageName}`)
 	await stack.run()
 })().then(() => { })

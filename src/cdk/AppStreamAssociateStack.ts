@@ -14,6 +14,14 @@ export class AppStreamAssociateStack extends cdk.Stack {
 		const configFile = this.node.tryGetContext("configFile")
 		const config = JSON.parse(fs.readFileSync(configFile, "utf8")) as Config
 
+		if (config.awsTag) {
+			const tag = cdk.Tags.of(this)
+			tag.add("Service", config.awsTag.service)
+			tag.add("Team", config.awsTag.team)
+			tag.add("User", config.awsTag.user)
+			tag.add("Environment", config.awsTag.environment)
+		}
+
 		const fleetName = `${config.fleetName}-${moment().format("YYYYMMDD")}`
 		const stackName = `${config.stackName}-${moment().format("YYYYMMDD")}`
 		new appstream.CfnStackFleetAssociation(this, "association", {
@@ -25,6 +33,8 @@ export class AppStreamAssociateStack extends cdk.Stack {
 
 (async () => {
 	const app = new cdk.App()
-	const stack = new AppStreamAssociateStack(app, "AppStreamAssociateStack")
+	const configFile = app.node.tryGetContext("configFile")
+	const config = JSON.parse(fs.readFileSync(configFile, "utf8")) as Config
+	const stack = new AppStreamAssociateStack(app, `AppStreamAssociateStack-${config.imageName}`)
 	await stack.run()
 })().then(() => { })

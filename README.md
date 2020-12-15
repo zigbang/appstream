@@ -103,6 +103,7 @@ AppStream 이미지를 만들기 위해서는 사람의 손이 너무 많이 가
 | baseImage   | x        | String | AppStream-WinServer2019| `AppStream Image Builder`에서 생성할 Base Image, [AppStream Base Image List](https://docs.aws.amazon.com/appstream2/latest/developerguide/base-image-version-history.html) 참고<br>               `ex) AppStream-Graphics-G4dn-WinServer2019`로 값을 넣으면 해당 이미지 중 Release Date 중 가장 최신인 이미지를 가져옴(현재 기준: `AppStream-Graphics-G4dn-WinServer2019-07-16-2020`)<br>                      |
 | imageName          | o        | String | - | `AppStream Image` 이름                                                                                                                                                                                                                                              |
 | fleetName          | o        | String | - | `AppStream Fleet` 이름                                                                                                                                                                                                                                            |
+| fleetSecurityGroupId          | x        | String | - | `AppStream Fleet` 에서 사용할 Security이며, 기존에 만들어진 SecurityGroup을 사용 시 추가 기존에 사용하는 SecurityGroup을 사용하지 않는다면 자동으로 생성 됨.                                                                                                                                                                                                                                               |
 | fleetEnableDefaultInternetAccess?          | x        | Boolean | true | `AppStream Fleet`에서 Internet Access 허용 유무<br>NAT Gateway를 사용할 경우 `false`로 설정 그리고 사용할 `subnet`이 Private Subnet인지 확인                                                                                                                                                                                                                                                |
 | fleetDesiredInstances        | x        | Number | 5 | `AppStream Fleet`에서 사용할 Instance의 개수 <br> [Fleet Auto Scaling](https://docs.aws.amazon.com/appstream2/latest/developerguide/autoscaling.html) 참고                                                                                                                                                                              |
 | fleetType         | x        | String | ON_DEMAND | `AppStream Fleet`에서 Desktop까지 제공할 경우: `ALWAYS_ON`, Application만 제공할 경우: `ON_DEMAND`                                                                                                                                                                                                                            |
@@ -110,7 +111,18 @@ AppStream 이미지를 만들기 위해서는 사람의 손이 너무 많이 가
 | instanceType       | o        | String | - | `AppStream Image Builder` 및 `Fleet`에서 사용 하는 VM instance 유형 (ex. stream.standard.medium) [AppStream Instance Type List](https://aws.amazon.com/appstream2/pricing/#:~:text=Amazon%20AppStream%202.0%20supports%20three,and%20Streaming%20URL%20(API).) 참고 |
 | storageConnectorType | x        | String | - |`AppStream Stack`에서 사용 하는 Storage Type `GOOGLE_DRIVE, ONE_DRIVE, HOMEFOLDERS` <br>[AppStream Storage Connector](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appstream-stack-storageconnector.html#cfn-appstream-stack-storageconnector-connectortype) 참고|
 | connectorDomains  | x        | String[] | undefined |`AppStreamStack`                                                                                                                                                   에서 Storage Connector 중 `GOOGLE_DRIVE` 혹은 `ONE_DRIVE` 사용 시 Access 가능한 Domain 지정 (ex. `zigbang.com`)<br> `기본 값: undefined`                  |
-| applications       | o        | String[] | - | 설치할 소프트웨어의 목록                                                                                                                                                                                                                                            |
+| awsTag       | x        | String | - | AWS 리소스에 추가 할  Tag                                                                                                                                                                                                                                           |
+| applications       | o        | String[] | - | 설치할 소프트웨어의 목록                                                                         |
+| scripts       | x        | String[] | - |`AppStream Image Builder`에 추가적인 Powershell 설정이 필요한 경우 해당 옵션 사용                                                                        |
+
+### awsTag 
+
+| Variable    | Required | Type   | Description                                                   |
+| ----------- | -------- | ------ | ------------------------------------------------------------- |
+| service     | o        | String | `AWS Resource` Service Name (ex. AppStream)`    			  |
+| team		  | o        | String | `AWS Resource`를 배포한 Team Name (ex. Infra)`                  |
+| user        | o        | String | `AWS Resource`를 사용하는 User Name (ex. edward)                   |
+| environment | o        | String | `AWS Resource`를 배포한 Environment Name (ex. dev or prod) |
 
 ### Application
 

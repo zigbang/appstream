@@ -13,14 +13,22 @@ export interface Config {
 	imageName: string
 	fleetName: string
 	fleetEnableDefaultInternetAccess?: boolean
+	fleetSecurityGroupId?: string
 	fleetDesiredInstances?: number
 	fleetType?: string
 	stackName: string
 	instanceType: string
 	storageConnectorType?: string
 	connectorDomains?: string[]
+	awsTag?: Tag
 	applications: Application[]
 	scripts?: string[]
+}
+export interface Tag {
+	service: string
+	team: string
+	user: string
+	environment: string
 }
 
 export interface Application {
