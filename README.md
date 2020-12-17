@@ -111,18 +111,16 @@ AppStream 이미지를 만들기 위해서는 사람의 손이 너무 많이 가
 | instanceType       | o        | String | - | `AppStream Image Builder` 및 `Fleet`에서 사용 하는 VM instance 유형 (ex. stream.standard.medium) [AppStream Instance Type List](https://aws.amazon.com/appstream2/pricing/#:~:text=Amazon%20AppStream%202.0%20supports%20three,and%20Streaming%20URL%20(API).) 참고 |
 | storageConnectorType | x        | String | - |`AppStream Stack`에서 사용 하는 Storage Type `GOOGLE_DRIVE, ONE_DRIVE, HOMEFOLDERS` <br>[AppStream Storage Connector](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appstream-stack-storageconnector.html#cfn-appstream-stack-storageconnector-connectortype) 참고|
 | connectorDomains  | x        | String[] | undefined |`AppStreamStack`                                                                                                                                                   에서 Storage Connector 중 `GOOGLE_DRIVE` 혹은 `ONE_DRIVE` 사용 시 Access 가능한 Domain 지정 (ex. `zigbang.com`)<br> `기본 값: undefined`                  |
-| awsTag       | x        | String | - | AWS 리소스에 추가 할  Tag                                                                                                                                                                                                                                           |
+| tags       | x        | String[] | - | AWS 리소스에 추가 할  Tag                                                                                                                                                                                                                                           |
 | applications       | o        | String[] | - | 설치할 소프트웨어의 목록                                                                         |
 | scripts       | x        | String[] | - |`AppStream Image Builder`에 추가적인 Powershell 설정이 필요한 경우 해당 옵션 사용                                                                        |
 
-### awsTag 
+### Tag 
 
 | Variable    | Required | Type   | Description                                                   |
 | ----------- | -------- | ------ | ------------------------------------------------------------- |
-| service     | o        | String | `AWS Resource` Service Name (ex. AppStream)`    			  |
-| team		  | o        | String | `AWS Resource`를 배포한 Team Name (ex. Infra)`                  |
-| user        | o        | String | `AWS Resource`를 사용하는 User Name (ex. edward)                   |
-| environment | o        | String | `AWS Resource`를 배포한 Environment Name (ex. dev or prod) |
+| key         | o        | String | `AWS Tags`에서 사용하는 Key   			  						  |
+| value       | o        | String | `AWS Tags`에서 사용하는 Value  			  					     |
 
 ### Application
 

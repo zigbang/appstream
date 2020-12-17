@@ -20,15 +20,14 @@ export interface Config {
 	instanceType: string
 	storageConnectorType?: string
 	connectorDomains?: string[]
-	awsTag?: Tag
+	tags?: Tag[]
 	applications: Application[]
 	scripts?: string[]
 }
+
 export interface Tag {
-	service: string
-	team: string
-	user: string
-	environment: string
+	key: string
+	value: string
 }
 
 export interface Application {

@@ -16,14 +16,13 @@ export class AppstreamFleetStack extends cdk.Stack {
 		const configFile = this.node.tryGetContext("configFile")
 		const config = JSON.parse(fs.readFileSync(configFile, "utf8")) as Config
 
-		if (config.awsTag) {
-			const tag = cdk.Tags.of(this)
-			tag.add("Service", config.awsTag.service)
-			tag.add("Team", config.awsTag.team)
-			tag.add("User", config.awsTag.user)
-			tag.add("Environment", config.awsTag.environment)
+		if (config.tags) {
+			const tags = config.tags
+			for (const tag of tags) {
+				const cdkTags = cdk.Tags.of(this)
+				cdkTags.add(tag.key, tag.value)
+			}
 		}
-
 		// vpc
 		const availabilityZones = [config.availabilityZone]
 		const vpc = ec2.Vpc.fromVpcAttributes(this, "appstream-vpc", {
@@ -77,6 +76,6 @@ export class AppstreamFleetStack extends cdk.Stack {
 	const app = new cdk.App()
 	const configFile = app.node.tryGetContext("configFile")
 	const config = JSON.parse(fs.readFileSync(configFile, "utf8")) as Config
-	const stack = new AppstreamFleetStack(app, `AppStreamFleetStack-${config.imageName}`)
+	const stack = new AppstreamFleetStack(app, `AppStream-FleetStack-${config.imageName}`)
 	await stack.run()
 })().then(() => { })
