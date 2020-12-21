@@ -107,7 +107,7 @@ class Deploy extends Base {
 
 	private async createAppstreamFleet() {
 		console.log("> wait for AppStream Stack")
-		while (!(await this.sdk.checkCloudformation("AppStream") && await this.sdk.checkCloudformation("AppStreamImageBuilderStack"))) {
+		while (!(await this.sdk.checkCloudformation(`AppStream-ActiveDirectory-${this.config?.imageName}`) && await this.sdk.checkCloudformation(`AppStream-ImageBuilder-${this.config?.imageName}`))) {
 			await this.sleep(1000 * 60 * 1)
 		}
 
