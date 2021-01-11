@@ -63,7 +63,7 @@ export class SdkUtil {
 
 	async describeImage(): Promise<any> {
 		try {
-			const data = this.appstream.describeImages().promise()
+			const data = this.appstream.describeImages({ Names: [`${this.config?.baseImage}` || "AppStream-WinServer2019-12-28-2020"] }).promise()
 			const result = JSON.stringify((await data).Images)
 
 			const images = JSON.parse(result)
