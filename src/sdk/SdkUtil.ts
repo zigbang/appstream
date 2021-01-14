@@ -63,18 +63,17 @@ export class SdkUtil {
 
 	async describeImage(): Promise<any> {
 		try {
-			const data = this.appstream.describeImages({ Names: [`${this.config?.baseImage}` || "AppStream-WinServer2019-12-28-2020"] }).promise()
-			const result = JSON.stringify((await data).Images)
-
+			const data = await this.appstream.describeImages().promise()
+			const result = JSON.stringify((data).Images)
 			const images = JSON.parse(result)
 			const winSvr = images.filter((list: any) => {
 				return list.Name.includes(this.config?.baseImage || "AppStream-WinServer2019")
 			})
 			const result2 = Object.keys(winSvr)
 				.sort((a, b) => Date.parse(winSvr[b].PublicBaseImageReleasedDate) - Date.parse(winSvr[a].PublicBaseImageReleasedDate))
-				.map((k) => ({ [k]: winSvr[k] }))
+				.map((k) => (winSvr[k]))
 			const winSvrLatestImage: any = result2[0]
-			const winSvrLatestImageArn = winSvrLatestImage[0]["Arn"]
+			const winSvrLatestImageArn = winSvrLatestImage["Arn"]
 			return winSvrLatestImageArn as string
 		} catch (err) {
 			console.log(err, err.stack)
